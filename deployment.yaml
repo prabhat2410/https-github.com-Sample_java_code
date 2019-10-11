@@ -1,0 +1,36 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: samplejava-service
+spec:
+  selector:
+    app: samplejava
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: example-samplejava
+  labels:
+    app: samplejava
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: samplejava
+  template:
+    metadata:
+      labels:
+        app: samplejava
+    spec:
+      imagePullSecrets:
+      - name: pipeline-docker-registry
+      containers:
+      - name: maven
+        image: ${CICD_IMAGE}:${CICD_EXECUTION_SEQUENCE}
+        ports:
+        - containerPort: 8080
