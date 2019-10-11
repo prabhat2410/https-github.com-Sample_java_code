@@ -1,0 +1,19 @@
+stages:
+- name: mvn
+  steps:
+  - runScriptConfig:
+      image: maven:3-jdk-7
+      shellScript: mvn clean install
+- name: Publish
+  steps:
+  - publishImageConfig:
+      dockerfilePath: ./Dockerfile
+      buildContext: .
+      tag: example-samplejava:${CICD_EXECUTION_SEQUENCE}
+      registry: 127.0.0.1:34889
+- name: Deploy
+  steps:
+  - applyYamlConfig:
+      path: ./deployment.yaml
+timeout: 60
+notification: {}
