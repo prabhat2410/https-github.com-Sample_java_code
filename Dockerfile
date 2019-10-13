@@ -1,5 +1,7 @@
-FROM tomcat
-RUN ["rm", "-rf", "/usr/local/tomcat/webapps/ROOT"]
-ADD target/samplejava-1.0.0.BUILD-SNAPSHOT.war /usr/local/tomcat/webapps/
+FROM tomcat:7-jre7
+MAINTAINER xyz
+
+RUN ["rm", "-fr", "/usr/local/tomcat/webapps/ROOT"]
+COPY ./target/example-samplejava-1.0-SNAPSHOT.war /usr/local/tomcat/webapps/ROOT.war
 
 CMD ["catalina.sh", "run"]
